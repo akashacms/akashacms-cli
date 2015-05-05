@@ -26,8 +26,18 @@ var spawn      = require('child_process').spawn;
 var exec       = require('child_process').exec;
 var http       = require('http');
 var program    = require('commander');
-var akasha     = require('akashacms');
 var request    = require('request');
+var resolve    = require('resolve').sync;
+
+
+var fnakasha;
+try {
+    fnakasha = resolve('akashacms', { basedir: process.cwd() });
+} catch (ex) {
+    console.error("Could not find AkashaCMS because: "+ ex);
+    process.exit();
+}
+var akasha = require(fnakasha);
 
 'use strict';
 
