@@ -34,6 +34,7 @@
     "node": ">=0.10.1"
   },
   "dependencies": {
-    "commander": ">=1.1.1"
+    "commander": ">=1.1.1",
+    "request": "*"
   }
 }
