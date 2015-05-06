@@ -264,7 +264,7 @@ program
 			if (err) {
 				util.log('ERROR '+ err);
 			} else {
-				require('./server/app')(akasha, config);
+			    akasha.runEditServer(config);
 			}
 		});
     });
