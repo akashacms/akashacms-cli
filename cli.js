@@ -30,14 +30,25 @@ var request    = require('request');
 var resolve    = require('resolve').sync;
 
 
-var fnakasha;
-try {
-    fnakasha = resolve('akashacms', { basedir: process.cwd() });
-} catch (ex) {
-    console.error("Could not find AkashaCMS because: "+ ex);
-    process.exit();
+var loadAkasha = function() {
+    var fnakasha;
+    if (process.env.AKASHAPATH) {
+        fnakasha = process.env.AKASHAPATH;
+    } else {
+        try {
+            fnakasha = resolve('akashacms', { basedir: process.cwd() });
+        } catch (ex) {
+            console.error("Could not find AkashaCMS because: "+ ex);
+            console.error("");
+            console.error("If you're seeing this message, akashacms hasn't been");
+            console.error("installed locally.  You may need to type 'npm install'. ");
+            console.error("");
+            console.error("See http://akashacms.com for more help");
+            process.exit();
+        }
+    }
+    return require(fnakasha);
 }
-var akasha = require(fnakasha);
 
 'use strict';
 
@@ -91,6 +102,7 @@ program
     .command('build')
     .description('build an AkashaCMS site in the current directory')
     .action(function() {
+        var akasha = loadAkasha();
         var config = require(path.join(process.cwd(), '/config.js'));
         akasha.config(config);
         akasha.process(config, function(err) {
@@ -102,6 +114,7 @@ program
     .command('render <fileName>')
     .description('render a file into the output directory')
     .action(function(fileName) {
+        var akasha = loadAkasha();
         var config = require(path.join(process.cwd(), '/config.js'));
         akasha.config(config);
 		akasha.gatherDir(config, config.root_docs, function(err, data) {
@@ -131,6 +144,7 @@ program
     .command('oembed <url>')
     .description('fetch and display oEmbed data for a given URL')
     .action(function(url) {
+        var akasha = loadAkasha();
         var config = require(path.join(process.cwd(), '/config.js'));
         akasha.config(config);
         akasha.oEmbedData(url, function(err, result) {
@@ -143,6 +157,7 @@ program
     .command('metadata <fileName>')
     .description('Print the metadata for a document')
     .action(function(fileName) {
+        var akasha = loadAkasha();
         var config = require(path.join(process.cwd(), '/config.js'));
         akasha.config(config);
         akasha.readDocumentEntry(config, fileName, function(err, docEntry) {
@@ -159,6 +174,7 @@ program
     .command('findtemplate <fileName>')
     .description('find a template')
     .action(function(fileName) {
+        var akasha = loadAkasha();
         var config = require(path.join(process.cwd(), '/config.js'));
         akasha.config(config);
         akasha.findTemplateAsync(config, fileName, function(err, info) {
@@ -171,6 +187,7 @@ program
     .command('findpartial <fileName>')
     .description('find a partial')
     .action(function(fileName) {
+        var akasha = loadAkasha();
         var config = require(path.join(process.cwd(), '/config.js'));
         akasha.config(config);
         akasha.findPartialAsync(config, fileName, function(err, info) {
@@ -183,6 +200,7 @@ program
     .command('finddocument <fileName>')
     .description('find a document')
     .action(function(fileName) {
+        var akasha = loadAkasha();
         var config = require(path.join(process.cwd(), '/config.js'));
         akasha.config(config);
         akasha.findDocumentAsync(config, fileName, function(err, info) {
@@ -195,6 +213,7 @@ program
     .command('findasset <fileName>')
     .description('find an asset')
     .action(function(fileName) {
+        var akasha = loadAkasha();
         var config = require(path.join(process.cwd(), '/config.js'));
         akasha.config(config);
         akasha.findAssetAsync(config, fileName, function(err, info) {
@@ -208,6 +227,7 @@ program
     .description('Deploy the akashacms site using configuration file')
     // .option('-f, --force', 'force')
     .action(function(options) {
+        var akasha = loadAkasha();
         var config = require(path.join(process.cwd(), '/config.js'));
         akasha.config(config);
         var logger = akasha.getLogger('deploy');
@@ -236,6 +256,7 @@ program
     .command('serve')
     .description('start the editing server')
     .action(function() {
+        var akasha = loadAkasha();
         // var staticSrv  = require('node-static');
         var config = require(path.join(process.cwd(), '/config.js'));
         akasha.config(config);
@@ -252,6 +273,7 @@ program
     .command('preview')
     .description('simple preview of built site')
     .action(function() {
+        var akasha = loadAkasha();
         // var staticSrv  = require('node-static');
         var config = require(path.join(process.cwd(), '/config.js'));
         akasha.config(config);
@@ -262,6 +284,7 @@ program
     .command('fixup <fileName>')
     .description('Fix various unwanted characters')
     .action(function(fileName) {
+        var akasha = loadAkasha();
         var config = require(path.join(process.cwd(), '/config.js'));
         akasha.config(config);
         akasha.readDocumentEntry(config, fileName, function(err, entry) {
@@ -281,6 +304,7 @@ program
 	.description("List the chain of index.html's for a file")
 	.action(function(fileName) {
 	
+        var akasha = loadAkasha();
         var config = require(path.join(process.cwd(), '/config.js'));
         akasha.config(config);
 		akasha.gatherDir(config, config.root_docs, function(err, data) {
@@ -298,6 +322,7 @@ program
     .description('List the files in this site')
     .action(function() {
 	
+        var akasha = loadAkasha();
         var config = require(path.join(process.cwd(), '/config.js'));
         akasha.config(config);
 		akasha.gatherDir(config, config.root_docs, function(err, data) {
@@ -315,6 +340,7 @@ program
     .command('config')
     .description('Show configuration parameters of the current site')
     .action(function() {
+        var akasha = loadAkasha();
         var config = require(path.join(process.cwd(), '/config.js'));
         akasha.config(config);
         
