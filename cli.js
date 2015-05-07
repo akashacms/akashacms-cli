@@ -48,7 +48,7 @@ var loadAkasha = function() {
         }
     }
     return require(fnakasha);
-}
+};
 
 'use strict';
 
@@ -105,7 +105,7 @@ program
         var akasha = loadAkasha();
         var config = require(path.join(process.cwd(), '/config.js'));
         akasha.config(config);
-        akasha.process(config, function(err) {
+        akasha.process(function(err) {
             if (err) throw new Error(err);
         });
     });
@@ -117,10 +117,10 @@ program
         var akasha = loadAkasha();
         var config = require(path.join(process.cwd(), '/config.js'));
         akasha.config(config);
-		akasha.gatherDir(config, config.root_docs, function(err, data) {
+		akasha.gatherDir(config.root_docs, function(err, data) {
 			if (err) throw err;
 			else {
-				akasha.renderFile(config, fileName, function(err) {
+				akasha.renderFile(fileName, function(err) {
 					if (err) throw err;
 				});
 			}
@@ -128,12 +128,25 @@ program
     });
 
 program
+    .command('zip')
+    .description('Create ZIP archive of rendered site')
+    .action(function(fileName) {
+        var akasha = loadAkasha();
+        var config = require(path.join(process.cwd(), '/config.js'));
+        akasha.config(config);
+        akasha.zipRenderedSite(function(err) {
+            if (err) throw err;
+        });
+    });
+	
+
+program
     .command('ping')
     .description('Ping search engines for sitemap submission')
     .action(function(fileName) {
         var config = require(path.join(process.cwd(), '/config.js'));
         akasha.config(config);
-        akasha.pingXmlSitemap(config, function(err) {
+        akasha.pingXmlSitemap(function(err) {
             if (err) throw err;
         });
     });
@@ -160,7 +173,7 @@ program
         var akasha = loadAkasha();
         var config = require(path.join(process.cwd(), '/config.js'));
         akasha.config(config);
-        akasha.readDocumentEntry(config, fileName, function(err, docEntry) {
+        akasha.readDocumentEntry(fileName, function(err, docEntry) {
         	if (err) {
         		util.log(err);
         	} else {
@@ -177,7 +190,7 @@ program
         var akasha = loadAkasha();
         var config = require(path.join(process.cwd(), '/config.js'));
         akasha.config(config);
-        akasha.findTemplateAsync(config, fileName, function(err, info) {
+        akasha.findTemplateAsync(fileName, function(err, info) {
         	if (err) util.log(err);
         	else util.log(util.inspect(info));
         });
@@ -190,7 +203,7 @@ program
         var akasha = loadAkasha();
         var config = require(path.join(process.cwd(), '/config.js'));
         akasha.config(config);
-        akasha.findPartialAsync(config, fileName, function(err, info) {
+        akasha.findPartialAsync(fileName, function(err, info) {
         	if (err) util.log(err);
         	else util.log(util.inspect(info));
         });
@@ -203,7 +216,7 @@ program
         var akasha = loadAkasha();
         var config = require(path.join(process.cwd(), '/config.js'));
         akasha.config(config);
-        akasha.findDocumentAsync(config, fileName, function(err, info) {
+        akasha.findDocumentAsync(fileName, function(err, info) {
         	if (err) util.log(err);
         	else util.log(util.inspect(info));
         });
@@ -216,7 +229,7 @@ program
         var akasha = loadAkasha();
         var config = require(path.join(process.cwd(), '/config.js'));
         akasha.config(config);
-        akasha.findAssetAsync(config, fileName, function(err, info) {
+        akasha.findAssetAsync(fileName, function(err, info) {
         	if (err) util.log(err);
         	else util.log(util.inspect(info));
         });
@@ -239,7 +252,7 @@ program
                             config.deploy_ssh2sync.auth);
         }
         else if (config.deploy_rsync) {
-        	var rsync = akasha.deployViaRsync(config);
+        	var rsync = akasha.deployViaRsync();
         	rsync.stdout.on('data', function(data) {
         		logger.info(data.toString());
         	});
@@ -260,11 +273,11 @@ program
         // var staticSrv  = require('node-static');
         var config = require(path.join(process.cwd(), '/config.js'));
         akasha.config(config);
-		akasha.gatherDir(config, config.root_docs, function(err, data) {
+		akasha.gatherDir(config.root_docs, function(err, data) {
 			if (err) {
 				util.log('ERROR '+ err);
 			} else {
-			    akasha.runEditServer(config);
+			    akasha.runEditServer();
 			}
 		});
     });
@@ -277,7 +290,7 @@ program
         // var staticSrv  = require('node-static');
         var config = require(path.join(process.cwd(), '/config.js'));
         akasha.config(config);
-        akasha.runPreviewServer(config);
+        akasha.runPreviewServer();
     });
     
 program
@@ -287,7 +300,7 @@ program
         var akasha = loadAkasha();
         var config = require(path.join(process.cwd(), '/config.js'));
         akasha.config(config);
-        akasha.readDocumentEntry(config, fileName, function(err, entry) {
+        akasha.readDocumentEntry(fileName, function(err, entry) {
         	if (err) throw err;
         	else {        	
 				var text = fs.readFileSync(entry.fullpath, "utf-8");
@@ -307,11 +320,11 @@ program
         var akasha = loadAkasha();
         var config = require(path.join(process.cwd(), '/config.js'));
         akasha.config(config);
-		akasha.gatherDir(config, config.root_docs, function(err, data) {
+		akasha.gatherDir(config.root_docs, function(err, data) {
 			if (err) {
 				util.log('ERROR '+ err);
 			} else {
-        		var chain = akasha.indexChain(config, fileName);
+        		var chain = akasha.indexChain(fileName);
         		util.log(util.inspect(chain));
         	}
         });
@@ -325,11 +338,11 @@ program
         var akasha = loadAkasha();
         var config = require(path.join(process.cwd(), '/config.js'));
         akasha.config(config);
-		akasha.gatherDir(config, config.root_docs, function(err, data) {
+		akasha.gatherDir(config.root_docs, function(err, data) {
 			if (err) {
 				util.log('ERROR '+ err);
 			} else {
-				akasha.eachDocument(config, function(entry) {
+				akasha.eachDocument(function(entry) {
 					util.log(entry.fullpath);
 				});
 			}
@@ -353,22 +366,22 @@ program
         }
         console.log('');
         console.log('assets directories:');
-        for (var i = 0; i < config.root_assets.length; i++) {
+        for (i = 0; i < config.root_assets.length; i++) {
             console.log('\t'+ config.root_assets[i]);
         }
         console.log('');
         console.log('partials directories:');
-        for (var i = 0; i < config.root_partials.length; i++) {
+        for (i = 0; i < config.root_partials.length; i++) {
             console.log('\t'+ config.root_partials[i]);
         }
         console.log('');
         console.log('layouts directories:');
-        for (var i = 0; i < config.root_layouts.length; i++) {
+        for (i = 0; i < config.root_layouts.length; i++) {
             console.log('\t'+ config.root_layouts[i]);
         }
         console.log('');
         console.log('plugins:');
-        for (var i = 0; i < config.plugins.length; i++) {
+        for (i = 0; i < config.plugins.length; i++) {
             console.log('\t'+ config.plugins[i].name);
         }
         console.log('');
