@@ -144,6 +144,7 @@ program
     .command('ping')
     .description('Ping search engines for sitemap submission')
     .action(function(fileName) {
+        var akasha = loadAkasha();
         var config = require(path.join(process.cwd(), '/config.js'));
         akasha.config(config);
         akasha.pingXmlSitemap(function(err) {
