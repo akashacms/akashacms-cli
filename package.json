@@ -4,7 +4,7 @@
     "email": "david@davidherron.com",
     "url": "http://davidherron.com"
   },
-  "name": "akashacms-cli",
+  "name": "@akashacms/cli",
   "keywords": [
     "content management system",
     "cms",
@@ -29,13 +29,13 @@
   "bin": {
     "akashacms": "cli.js"
   },
-  "version": "0.4.7",
+  "version": "0.4.8",
   "engines": {
-    "node": ">=0.10.1"
+    "node": ">=8.1"
   },
   "dependencies": {
-    "commander": ">=1.1.1",
-    "request": "*",
-    "resolve": "*"
+    "commander": ">=2.19",
+    "request": "^2.88",
+    "resolve": "^1.9"
   }
 }

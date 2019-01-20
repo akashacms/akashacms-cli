@@ -2,7 +2,7 @@
 
 /**
  *
- * Copyright 2012-2015 David Herron
+ * Copyright 2012-2019 David Herron
  * 
  * This file is part of AkashaCMS (http://akashacms.com/).
  *
@@ -103,7 +103,7 @@ program
     .description('build an AkashaCMS site in the current directory')
     .action(function() {
         var akasha = loadAkasha();
-        var config = require(path.join(process.cwd(), '/config.js'));
+        var config = require(path.join(__dirname, '/config.js'));
         akasha.config(config);
         akasha.process(function(err) {
             if (err) throw new Error(err);
@@ -115,7 +115,7 @@ program
     .description('render a file into the output directory')
     .action(function(fileName) {
         var akasha = loadAkasha();
-        var config = require(path.join(process.cwd(), '/config.js'));
+        var config = require(path.join(__dirname, '/config.js'));
         akasha.config(config);
 		akasha.gatherDir(config.root_docs, function(err, data) {
 			if (err) throw err;
@@ -132,7 +132,7 @@ program
     .description('Create ZIP archive of rendered site')
     .action(function(fileName) {
         var akasha = loadAkasha();
-        var config = require(path.join(process.cwd(), '/config.js'));
+        var config = require(path.join(__dirname, '/config.js'));
         akasha.config(config);
         akasha.zipRenderedSite(function(err) {
             if (err) throw err;
@@ -145,7 +145,7 @@ program
     .description('Ping search engines for sitemap submission')
     .action(function(fileName) {
         var akasha = loadAkasha();
-        var config = require(path.join(process.cwd(), '/config.js'));
+        var config = require(path.join(__dirname, '/config.js'));
         akasha.config(config);
         akasha.pingXmlSitemap(function(err) {
             if (err) throw err;
@@ -172,7 +172,7 @@ program
     .description('Print the metadata for a document')
     .action(function(fileName) {
         var akasha = loadAkasha();
-        var config = require(path.join(process.cwd(), '/config.js'));
+        var config = require(path.join(__dirname, '/config.js'));
         akasha.config(config);
         akasha.readDocumentEntry(fileName, function(err, docEntry) {
         	if (err) {
@@ -189,7 +189,7 @@ program
     .description('find a template')
     .action(function(fileName) {
         var akasha = loadAkasha();
-        var config = require(path.join(process.cwd(), '/config.js'));
+        var config = require(path.join(__dirname, '/config.js'));
         akasha.config(config);
         akasha.findTemplateAsync(fileName, function(err, info) {
         	if (err) util.log(err);
@@ -202,7 +202,7 @@ program
     .description('find a partial')
     .action(function(fileName) {
         var akasha = loadAkasha();
-        var config = require(path.join(process.cwd(), '/config.js'));
+        var config = require(path.join(__dirname, '/config.js'));
         akasha.config(config);
         akasha.findPartialAsync(fileName, function(err, info) {
         	if (err) util.log(err);
@@ -215,7 +215,7 @@ program
     .description('find a document')
     .action(function(fileName) {
         var akasha = loadAkasha();
-        var config = require(path.join(process.cwd(), '/config.js'));
+        var config = require(path.join(__dirname, '/config.js'));
         akasha.config(config);
         akasha.findDocumentAsync(fileName, function(err, info) {
         	if (err) util.log(err);
@@ -228,7 +228,7 @@ program
     .description('find an asset')
     .action(function(fileName) {
         var akasha = loadAkasha();
-        var config = require(path.join(process.cwd(), '/config.js'));
+        var config = require(path.join(__dirname, '/config.js'));
         akasha.config(config);
         akasha.findAssetAsync(fileName, function(err, info) {
         	if (err) util.log(err);
@@ -242,7 +242,7 @@ program
     // .option('-f, --force', 'force')
     .action(function(options) {
         var akasha = loadAkasha();
-        var config = require(path.join(process.cwd(), '/config.js'));
+        var config = require(path.join(__dirname, '/config.js'));
         akasha.config(config);
         var logger = akasha.getLogger('deploy');
         if (config.deploy_ssh2sync) {
@@ -272,7 +272,7 @@ program
     .action(function() {
         var akasha = loadAkasha();
         // var staticSrv  = require('node-static');
-        var config = require(path.join(process.cwd(), '/config.js'));
+        var config = require(path.join(__dirname, '/config.js'));
         akasha.config(config);
 		akasha.gatherDir(config.root_docs, function(err, data) {
 			if (err) {
@@ -289,7 +289,7 @@ program
     .action(function() {
         var akasha = loadAkasha();
         // var staticSrv  = require('node-static');
-        var config = require(path.join(process.cwd(), '/config.js'));
+        var config = require(path.join(__dirname, '/config.js'));
         akasha.config(config);
         akasha.runPreviewServer();
     });
@@ -299,7 +299,7 @@ program
     .description('Fix various unwanted characters')
     .action(function(fileName) {
         var akasha = loadAkasha();
-        var config = require(path.join(process.cwd(), '/config.js'));
+        var config = require(path.join(__dirname, '/config.js'));
         akasha.config(config);
         akasha.readDocumentEntry(fileName, function(err, entry) {
         	if (err) throw err;
@@ -319,7 +319,7 @@ program
 	.action(function(fileName) {
 	
         var akasha = loadAkasha();
-        var config = require(path.join(process.cwd(), '/config.js'));
+        var config = require(path.join(__dirname, '/config.js'));
         akasha.config(config);
 		akasha.gatherDir(config.root_docs, function(err, data) {
 			if (err) {
@@ -337,7 +337,7 @@ program
     .action(function() {
 	
         var akasha = loadAkasha();
-        var config = require(path.join(process.cwd(), '/config.js'));
+        var config = require(path.join(__dirname, '/config.js'));
         akasha.config(config);
 		akasha.gatherDir(config.root_docs, function(err, data) {
 			if (err) {
@@ -355,7 +355,7 @@ program
     .description('Show configuration parameters of the current site')
     .action(function() {
         var akasha = loadAkasha();
-        var config = require(path.join(process.cwd(), '/config.js'));
+        var config = require(path.join(__dirname, '/config.js'));
         akasha.config(config);
         
         console.log('dirname: '+ process.cwd());
